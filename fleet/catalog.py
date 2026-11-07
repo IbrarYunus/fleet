@@ -12,7 +12,7 @@ from astroquery.sdss import SDSS
 from astroquery.gaia import Gaia
 import time
 from astropy import table
-import pkg_resources
+from importlib.resources import files
 from datetime import datetime, timezone
 from importlib.metadata import version as _package_version, PackageNotFoundError
 
@@ -353,11 +353,11 @@ host_limit = {'u': 23.42,
               'y': 22.86}
 
 # Import CFHLST data to classify objects as star/galaxy
-classification_catalog_filename = pkg_resources.resource_filename(__name__, 'classification_catalog.dat')
+classification_catalog_filename = str(files('fleet') / 'classification_catalog.dat')
 cached_catalog = table.Table.read(classification_catalog_filename, format='ascii', guess=False)
 
 # Import GLADE data to classify objects as star/galaxy
-glade_filename = pkg_resources.resource_filename(__name__, 'GLADE_short.txt')
+glade_filename = str(files('fleet') / 'GLADE_short.txt')
 cached_glade = table.Table.read(glade_filename, format='ascii.fast_csv', delimiter=',', guess=False)
 
 

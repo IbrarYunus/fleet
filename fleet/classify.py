@@ -7,7 +7,7 @@ from .catalog import (get_catalog, catalog_operations, overwrite_with_glade,
                       gaia_catalog_columns, clear_catalog_field_marker,
                       add_host_metadata)
 from .plot import make_plot, calculate_observability, calc_absmag, quick_plot
-import pkg_resources
+from importlib.resources import files
 import multiprocessing
 from functools import partial
 from sklearn.ensemble import RandomForestClassifier
@@ -70,7 +70,7 @@ def format_training(training_days, grouping, sorting_state, features, model, cle
     """
 
     # Read in table with input parameters
-    table_name = pkg_resources.resource_filename(__name__, f'training_set/table_{model}_{training_days}.txt')
+    table_name = str(files('fleet') / f'training_set/table_{model}_{training_days}.txt')
     training_table_in = table.Table.read(table_name, format='ascii')
 
     # Remove objects deemed to be bad
@@ -1430,7 +1430,7 @@ def create_training_set(phase_max=70, model='double', params_dir='training_set',
     """
     # Read in the list of SNe that will be used for training
     if all_objects is None:
-        reference_transients = pkg_resources.resource_filename(__name__, 'sne_best.txt')
+        reference_transients = str(files('fleet') / 'sne_best.txt')
         all_objects = table.Table.read(reference_transients, format='ascii')
         if object_list is not None:
             all_objects = all_objects[np.isin(all_objects['Name'], object_list)]
